@@ -1,6 +1,8 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QFrame, QMainWindow, QWidget, QGridLayout, QPushButton, QApplication, QVBoxLayout
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+from backend.connection import get_current_month_consumption
 from backend.plots import WeekPlots, MonthPlots, SixMonthPlots
 
 
@@ -231,6 +233,7 @@ class StatisticsView(QWidget):
         self.onduleur_button.setFlat(True)
         self.onduleur_button.setObjectName("onduleur_button")
         self.onduleur_button.clicked.connect(self.switch_to_onduleurs_page.emit)
+        self.updateLabels()
 
         mainWindow.setCentralWidget(self.centralwidget)
 
@@ -275,13 +278,13 @@ class StatisticsView(QWidget):
         self.week_label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
         self.week_label.setObjectName("six_month_label")
         self.week_plots_widget = QWidget(self.week_frame)
-        self.week_plots_widget.setGeometry(QtCore.QRect(40, 70, 1710, 580))
-        self.week_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.week_plots_widget.setGeometry(QtCore.QRect(40, 50, 1710, 650))
+        self.week_plots_widget.setStyleSheet("background-color: rgb(41, 45, 57);")
 
         self.week_plots = WeekPlots(parent=self.week_plots_widget)
-        self.week_plots.setGeometry(QtCore.QRect(0, 0, 1710, 580))
+        self.week_plots.setGeometry(QtCore.QRect(0, 0, 1710, 650))
         self.next_button_1 = QtWidgets.QPushButton(self.week_frame)
-        self.next_button_1.setGeometry(QtCore.QRect(994, 9, 33, 29))
+        self.next_button_1.setGeometry(QtCore.QRect(970, 9, 33, 29))
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("../../../../Downloads/next-svgrepo-com.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
@@ -307,6 +310,7 @@ class StatisticsView(QWidget):
         self.month_frame.setObjectName("month_frame")
         self.month_frame_title = QtWidgets.QLabel(self.month_frame)
         self.month_frame_title.setGeometry(QtCore.QRect(10, 0, 191, 41))
+        self.month_frame_title.setAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.month_frame_title.setFont(font)
@@ -315,7 +319,7 @@ class StatisticsView(QWidget):
         self.month_frame_title.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         self.month_frame_title.setObjectName("month_frame_title")
         self.nextButton_2 = QtWidgets.QPushButton(self.month_frame)
-        self.nextButton_2.setGeometry(QtCore.QRect(978, 9, 33, 29))
+        self.nextButton_2.setGeometry(QtCore.QRect(970, 9, 33, 29))
         self.nextButton_2.setText("")
         self.nextButton_2.setIcon(icon1)
         self.nextButton_2.setFlat(True)
@@ -338,11 +342,11 @@ class StatisticsView(QWidget):
         self.month_label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
         self.month_label.setObjectName("week_label_5")
         self.month_plots_widget = QWidget(self.month_frame)
-        self.month_plots_widget.setGeometry(QtCore.QRect(40, 70, 1710, 580))
-        self.month_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.month_plots_widget.setGeometry(QtCore.QRect(40, 50, 1710, 650))
+        self.month_plots_widget.setStyleSheet("background-color: rgb(41, 45, 57);")
 
         self.month_plots = MonthPlots(parent=self.month_plots_widget)
-        self.month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 580))
+        self.month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 650))
         self.statistics_stackedWidget.addWidget(self.month_statistiques_page)
         self.six_months_statistiques = QtWidgets.QWidget()
         self.six_months_statistiques.setObjectName("six_months_statistiques")
@@ -373,10 +377,10 @@ class StatisticsView(QWidget):
         self.six_month_label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
         self.six_month_label.setObjectName("six_month_label")
         self.six_month_plots_widget = QWidget(self.six_monthe_frame)
-        self.six_month_plots_widget.setGeometry(QtCore.QRect(40, 70, 1710, 580))
-        self.six_month_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.six_month_plots_widget.setGeometry(QtCore.QRect(40, 50, 1710, 650))
+        self.six_month_plots_widget.setStyleSheet("background-color: rgb(41, 45, 57);")
         self.six_month_plots = SixMonthPlots(parent=self.six_month_plots_widget)
-        self.six_month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 580))
+        self.six_month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 650))
 
         self.backButton_3 = QtWidgets.QPushButton(self.six_monthe_frame)
         self.backButton_3.setGeometry(QtCore.QRect(793, 9, 33, 29))
@@ -410,8 +414,6 @@ class StatisticsView(QWidget):
         self.notifications_button.setText(_translate("MainWindow", "Notifications"))
         self.logout_button.setText(_translate("MainWindow", "Deconnecter"))
         self.consomation_title_label.setText(_translate("MainWindow", "Consomation actuel"))
-        self.consomation_value_label.setText(_translate("MainWindow", "11111111111 kW"))
-        self.price_value_label.setText(_translate("MainWindow", "11111111111 DH"))
         self.price_title_label.setText(_translate("MainWindow", "Cout"))
         self.week_frame_title.setText(_translate("MainWindow", "Statistiques :"))
         self.month_frame_title.setText(_translate("MainWindow", "Statistiques :"))
@@ -421,5 +423,8 @@ class StatisticsView(QWidget):
         self.consomation_button.setText(_translate("MainWindow", "Consomation"))
         self.onduleur_button.setText(_translate("MainWindow", "Onduleurs"))
 
-
+    def updateLabels(self):
+        totale_consumption = round(get_current_month_consumption(), 2)
+        self.consomation_value_label.setText("%s W" % str(totale_consumption))
+        self.price_value_label.setText("%s DH" % str(round((totale_consumption * 0.56), 2)))
 

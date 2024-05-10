@@ -682,10 +682,10 @@ class OnduleursView(QWidget):
         if self.last_battery != battery:
             self.state_onduleur1.setText(status_dic.get(status))
 
-        if self.last_power != power or self.last_battery != power or self.last_battery != battery:
-            self.timer.timeout.connect(self.updateLabels)
-            self.timer.start(5000)
-            self.last_power = power
-            self.last_battery = battery
-            self.status = status
+        # if self.last_power != power or self.last_battery != power or self.last_battery != battery:
+        #     self.timer.timeout.connect(self.updateLabels)
+        #     self.timer.start(5000)
+        #     self.last_power = power
+        #     self.last_battery = battery
+        #     self.status = status
 

@@ -35,7 +35,6 @@ def insert_consumption():
         cursor.execute(query, (consumption, current_datetime, "5min"))
         mydb.commit()
         time.sleep(300)
-        print("added succefully")
 
 
 def insert_hour_consumption():

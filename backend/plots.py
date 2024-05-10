@@ -49,7 +49,6 @@ class WeekPlots(QWidget):
         self.ax.set_xlabel('Date', color='white')
         self.ax.set_xticks(range(len(dates)))
         self.ax.set_xticklabels(dates, rotation=45)
-        self.ax.set_yticklabels(consumptions)
 
         plt.tight_layout()
         self.bars = self.ax.bar(dates, consumptions)
@@ -60,7 +59,6 @@ class MonthPlots(QWidget):
         super().__init__(parent)
         self.figure, self.ax = plt.subplots()
         self.plot()
-        # Axis formatting.
         self.ax.spines['top'].set_visible(False)
         self.ax.spines['right'].set_visible(False)
         self.ax.spines['left'].set_visible(False)
@@ -70,17 +68,12 @@ class MonthPlots(QWidget):
         self.ax.yaxis.grid(True, color='#EEEEEE')
         self.ax.xaxis.grid(False)
 
-        # Add text annotations to the top of the bars.
         bar_color = self.bars[0].get_facecolor()
         for bar in self.bars:
-            self.ax.text(
-                bar.get_x() + bar.get_width() / 2,
-                bar.get_height() + 0.3,
-                round(bar.get_height(), 1),
-                horizontalalignment='center',
-                color=bar_color,
-                weight='bold'
-            )
+            self.ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.3,
+                         round(bar.get_height(), 1), horizontalalignment='center', color=bar_color, weight='bold')
+        self.ax.set_facecolor((41 / 255, 45 / 255, 57 / 255))
+        self.figure.patch.set_facecolor((41 / 255, 45 / 255, 57 / 255))
         self.canvas = FigureCanvas(self.figure)
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)
@@ -98,8 +91,15 @@ class MonthPlots(QWidget):
             consumptions.append(x[0])
             dates.append(x[1])
 
-        categories = dates
-        self.bars = self.ax.bar(categories, consumptions)
+        self.ax.tick_params(axis='x', colors='white')
+        self.ax.tick_params(axis='y', colors='white')
+        self.ax.set_ylabel('Consumption', color='white')
+        self.ax.set_xlabel('Date', color='white')
+        self.ax.set_xticks(range(len(dates)))
+        self.ax.set_xticklabels(dates, rotation=45)
+
+        plt.tight_layout()
+        self.bars = self.ax.bar(dates, consumptions)
 
 
 class SixMonthPlots(QWidget):
@@ -107,7 +107,6 @@ class SixMonthPlots(QWidget):
         super().__init__(parent)
         self.figure, self.ax = plt.subplots()
         self.plot()
-        # Axis formatting.
         self.ax.spines['top'].set_visible(False)
         self.ax.spines['right'].set_visible(False)
         self.ax.spines['left'].set_visible(False)
@@ -117,17 +116,12 @@ class SixMonthPlots(QWidget):
         self.ax.yaxis.grid(True, color='#EEEEEE')
         self.ax.xaxis.grid(False)
 
-        # Add text annotations to the top of the bars.
         bar_color = self.bars[0].get_facecolor()
         for bar in self.bars:
-            self.ax.text(
-                bar.get_x() + bar.get_width() / 2,
-                bar.get_height() + 0.3,
-                round(bar.get_height(), 1),
-                horizontalalignment='center',
-                color=bar_color,
-                weight='bold'
-            )
+            self.ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.3,
+                         round(bar.get_height(), 1), horizontalalignment='center', color=bar_color, weight='bold')
+        self.ax.set_facecolor((41 / 255, 45 / 255, 57 / 255))
+        self.figure.patch.set_facecolor((41 / 255, 45 / 255, 57 / 255))
         self.canvas = FigureCanvas(self.figure)
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)
@@ -145,9 +139,15 @@ class SixMonthPlots(QWidget):
             consumptions.append(x[0])
             dates.append(x[1])
 
-        categories = dates
-        self.bars = self.ax.bar(categories, consumptions)
+        self.ax.tick_params(axis='x', colors='white')
+        self.ax.tick_params(axis='y', colors='white')
+        self.ax.set_ylabel('Consumption', color='white')
+        self.ax.set_xlabel('Date', color='white')
+        self.ax.set_xticks(range(len(dates)))
+        self.ax.set_xticklabels(dates, rotation=45)
 
+        plt.tight_layout()
+        self.bars = self.ax.bar(dates, consumptions)
 
 # def plot():
 #     mydb = get_connection()

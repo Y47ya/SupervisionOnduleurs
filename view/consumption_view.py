@@ -1,6 +1,12 @@
+import time
+
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QFrame, QMainWindow, QWidget, QGridLayout, QPushButton, QApplication, QVBoxLayout
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+from backend.connection import get_min_consumption, get_max_consumption, get_avrg_consumption
+from backend.dictionaries import oids, source_dic
+from backend.snmp_protocole import snmp_get
 
 
 class ConsumptionView(QWidget):
@@ -194,21 +200,15 @@ class ConsumptionView(QWidget):
         self.consomation_analogue.setPixmap(QtGui.QPixmap("../icons/analogue-icon.png"))
         self.consomation_analogue.setScaledContents(True)
         self.consomation_analogue.setObjectName("consomation_analogue")
-        self.layoutWidget = QtWidgets.QWidget(self.consomation_frame)
-        self.layoutWidget.setGeometry(QtCore.QRect(240, 700, 352, 183))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.infos_layout = QtWidgets.QFormLayout(self.layoutWidget)
-        self.infos_layout.setContentsMargins(0, 0, 0, 0)
-        self.infos_layout.setObjectName("infos_layout")
-        self.valeure_label = QtWidgets.QLabel(self.layoutWidget)
+
+        self.valeure_label = QtWidgets.QLabel(self.consomation_frame)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.valeure_label.setFont(font)
         self.valeure_label.setStyleSheet("QLabel{\n"
                                          "    color: rgb(255, 255, 255);}")
         self.valeure_label.setObjectName("valeure_label")
-        self.infos_layout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.valeure_label)
-        self.value_label = QtWidgets.QLabel(self.layoutWidget)
+        self.value_label = QtWidgets.QLabel(self.consomation_frame)
         font = QtGui.QFont()
         font.setPointSize(20)
         font.setBold(True)
@@ -217,16 +217,14 @@ class ConsumptionView(QWidget):
         self.value_label.setStyleSheet("QLabel{\n"
                                        "    color: rgb(255, 255, 255);}")
         self.value_label.setObjectName("value_label")
-        self.infos_layout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.value_label)
-        self.moyenne_label = QtWidgets.QLabel(self.layoutWidget)
+        self.moyenne_label = QtWidgets.QLabel(self.consomation_frame)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.moyenne_label.setFont(font)
         self.moyenne_label.setStyleSheet("QLabel{\n"
                                          "    color: rgb(255, 255, 255);}")
         self.moyenne_label.setObjectName("moyenne_label")
-        self.infos_layout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.moyenne_label)
-        self.average_label = QtWidgets.QLabel(self.layoutWidget)
+        self.average_label = QtWidgets.QLabel(self.consomation_frame)
         font = QtGui.QFont()
         font.setPointSize(20)
         font.setBold(True)
@@ -235,16 +233,14 @@ class ConsumptionView(QWidget):
         self.average_label.setStyleSheet("QLabel{\n"
                                          "    color: rgb(255, 255, 255);}")
         self.average_label.setObjectName("average_label")
-        self.infos_layout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.average_label)
-        self.mini_label = QtWidgets.QLabel(self.layoutWidget)
+        self.mini_label = QtWidgets.QLabel(self.consomation_frame)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.mini_label.setFont(font)
         self.mini_label.setStyleSheet("QLabel{\n"
                                       "    color: rgb(255, 255, 255);}")
         self.mini_label.setObjectName("mini_label")
-        self.infos_layout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.mini_label)
-        self.max_value_label = QtWidgets.QLabel(self.layoutWidget)
+        self.max_value_label = QtWidgets.QLabel(self.consomation_frame)
         font = QtGui.QFont()
         font.setPointSize(20)
         font.setBold(True)
@@ -253,16 +249,14 @@ class ConsumptionView(QWidget):
         self.max_value_label.setStyleSheet("QLabel{\n"
                                            "    color: rgb(255, 255, 255);}")
         self.max_value_label.setObjectName("max_value_label")
-        self.infos_layout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.max_value_label)
-        self.max_label = QtWidgets.QLabel(self.layoutWidget)
+        self.max_label = QtWidgets.QLabel(self.consomation_frame)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.max_label.setFont(font)
         self.max_label.setStyleSheet("QLabel{\n"
                                      "    color: rgb(255, 255, 255);}")
         self.max_label.setObjectName("max_label")
-        self.infos_layout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.max_label)
-        self.min_value_label = QtWidgets.QLabel(self.layoutWidget)
+        self.min_value_label = QtWidgets.QLabel(self.consomation_frame)
         font = QtGui.QFont()
         font.setPointSize(20)
         font.setBold(True)
@@ -271,7 +265,6 @@ class ConsumptionView(QWidget):
         self.min_value_label.setStyleSheet("QLabel{\n"
                                            "    color: rgb(255, 255, 255);}")
         self.min_value_label.setObjectName("min_value_label")
-        self.infos_layout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.min_value_label)
         self.horizontalLayout.addWidget(self.consomation_frame)
         self.horizantal_frame2 = QtWidgets.QFrame(self.horizantal_frame1)
         self.horizantal_frame2.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -602,12 +595,54 @@ class ConsumptionView(QWidget):
         self.horizontalLayout.addWidget(self.horizantal_frame2)
         self.verticalLayout.addWidget(self.horizantal_frame1)
 
+        self.valeure_label.move(241, 701)
+        self.max_label.move(241, 748)
+        self.moyenne_label.move(241, 795)
+        self.mini_label.move(241, 842)
+
+        self.value_label.move(440, 701)
+        self.max_value_label.move(440, 748)
+        self.average_label.move(440, 795)
+        self.min_value_label.move(440, 842)
+
+        self.updateLabels()
+
         mainWindow.setCentralWidget(self.centralwidget)
         self.retranslateUi(mainWindow)
 
         self.layout.addWidget(self.centralwidget)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
+
+    last_consumption = 0
+    last_source = None
+
+    def updateLabels(self):
+        consumption = round(float(snmp_get(oids.get("outputWatt"))) * 5/60, 2)
+        source = snmp_get(oids.get("source"))
+        self.min_value_label.setText("%s W" % str(round(get_min_consumption(), 2)))
+        self.max_value_label.setText("%s W" % str(round(get_max_consumption(), 2)))
+        self.average_label.setText("%s W" % str(round(get_avrg_consumption(), 2)))
+        self.min_value_label.adjustSize()
+        self.average_label.adjustSize()
+        self.source_type_label.adjustSize()
+
+        # while True:
+        if self.last_consumption != consumption:
+            self.value_label.setText("%s W" % str(consumption))
+            self.value_label.adjustSize()
+
+            if consumption < get_min_consumption():
+                self.max_value_label.setText("%s W" % str(consumption))
+                self.min_value_label.adjustSize()
+
+            if consumption > get_max_consumption():
+                self.average_label.setText("%s W" % str(consumption))
+                self.average_label.adjustSize()
+
+        if self.last_source != source:
+                self.source_type_label.setText(source_dic.get(source))
+                self.source_type_label.adjustSize()
 
 
     def retranslateUi(self, MainWindow):
@@ -622,15 +657,10 @@ class ConsumptionView(QWidget):
         self.onduleur_button.setText(_translate("MainWindow", "Onduleurs"))
         self.title_label.setText(_translate("MainWindow", "Consomation :"))
         self.valeure_label.setText(_translate("MainWindow", "Valeure :"))
-        self.value_label.setText(_translate("MainWindow", "TextLabel"))
         self.moyenne_label.setText(_translate("MainWindow", "Moyenne :"))
-        self.average_label.setText(_translate("MainWindow", "TextLabel"))
         self.mini_label.setText(_translate("MainWindow", "Minimume :"))
-        self.max_value_label.setText(_translate("MainWindow", "TextLabel"))
         self.max_label.setText(_translate("MainWindow", "Maximume :"))
-        self.min_value_label.setText(_translate("MainWindow", "TextLabel"))
         self.source_label.setText(_translate("MainWindow", "Source :"))
-        self.source_type_label.setText(_translate("MainWindow", "Onduleurs"))
         self.class_title_frame.setText(_translate("MainWindow", "Classe d\'energie :"))
         self.label_14.setText(_translate("MainWindow", ">"))
         self.label_15.setText(_translate("MainWindow", "<"))

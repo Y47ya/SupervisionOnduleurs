@@ -418,6 +418,7 @@ class DashboardView(QWidget):
         self.statistics_stackedWidget = QtWidgets.QStackedWidget(self.frame_5)
         self.statistics_stackedWidget.setGeometry(QtCore.QRect(0, 0, 1781, 671))
         self.statistics_stackedWidget.setObjectName("stackedWidget")
+
         self.week_statistiques_page = QtWidgets.QWidget()
         self.week_statistiques_page.setObjectName("week_statistiques_page")
         self.week_frame = QtWidgets.QFrame(self.week_statistiques_page)
@@ -429,7 +430,8 @@ class DashboardView(QWidget):
         self.week_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.week_frame.setObjectName("week_frame")
         self.week_frame_title = QtWidgets.QLabel(self.week_frame)
-        self.week_frame_title.setGeometry(QtCore.QRect(10, 0, 191, 41))
+        # self.week_frame_title.setGeometry(QtCore.QRect(10, 0, 191, 41))
+        self.week_frame_title.move(10, 0)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.week_frame_title.setFont(font)
@@ -439,6 +441,7 @@ class DashboardView(QWidget):
         self.week_frame_title.setObjectName("week_frame_title")
         self.week_label = QtWidgets.QLabel(self.week_frame)
         self.week_label.setGeometry(QtCore.QRect(830, 0, 123, 40))
+        self.week_label.setAlignment(Qt.AlignCenter)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.week_label.setFont(font)
@@ -448,18 +451,19 @@ class DashboardView(QWidget):
         self.week_label.setObjectName("week_label")
 
         self.week_plots_widget = QWidget(self.week_frame)
-        self.week_plots_widget.setGeometry(QtCore.QRect(40, 50, 1600, 400))
+        self.week_plots_widget.setGeometry(QtCore.QRect(0, 40, 1700, 420))
         self.week_plots_widget.setStyleSheet("background-color: rgb(41, 45, 57);")
 
         self.week_plots = WeekPlots(parent=self.week_plots_widget)
-        self.week_plots.setGeometry(QtCore.QRect(0, 0, 1600, 400))
+        self.week_plots.setGeometry(QtCore.QRect(0, 0, 1700, 420))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../../../../Downloads/next-svgrepo-com (1).png"), QtGui.QIcon.Normal,
                        QtGui.QIcon.Off)
 
         self.nextButton_1 = QtWidgets.QPushButton(self.week_frame)
-        self.nextButton_1.setGeometry(QtCore.QRect(968, 9, 33, 29))
+        # self.nextButton_1.setGeometry(QtCore.QRect(968, 9, 33, 29))
+        self.nextButton_1.move(955, 7)
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("../../../../Downloads/next-svgrepo-com.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
@@ -479,7 +483,8 @@ class DashboardView(QWidget):
         self.month_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.month_frame.setObjectName("month_frame")
         self.month_frame_title = QtWidgets.QLabel(self.month_frame)
-        self.month_frame_title.setGeometry(QtCore.QRect(10, 0, 191, 41))
+        # self.month_frame_title.setGeometry(QtCore.QRect(10, 0, 191, 41))
+        self.month_frame_title.move(10, 0)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.month_frame_title.setFont(font)
@@ -488,21 +493,24 @@ class DashboardView(QWidget):
         self.month_frame_title.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         self.month_frame_title.setObjectName("month_frame_title")
         self.nextButton_2 = QtWidgets.QPushButton(self.month_frame)
-        self.nextButton_2.setGeometry(QtCore.QRect(978, 9, 33, 29))
+        # self.nextButton_2.setGeometry(QtCore.QRect(978, 9, 33, 29))
+        self.nextButton_2.move(955, 7)
         self.nextButton_2.setText("")
         self.nextButton_2.setIcon(icon1)
         self.nextButton_2.setFlat(True)
         self.nextButton_2.setObjectName("pushButton_9")
         self.nextButton_2.clicked.connect(self.next)
         self.backButton_2 = QtWidgets.QPushButton(self.month_frame)
-        self.backButton_2.setGeometry(QtCore.QRect(792, 9, 33, 29))
+        # self.backButton_2.setGeometry(QtCore.QRect(792, 9, 33, 29))
+        self.backButton_2.move(797, 7)
         self.backButton_2.setText("")
         self.backButton_2.setIcon(icon)
         self.backButton_2.setFlat(True)
         self.backButton_2.setObjectName("pushButton_10")
         self.backButton_2.clicked.connect(self.back)
         self.month_label = QtWidgets.QLabel(self.month_frame)
-        self.month_label.setGeometry(QtCore.QRect(850, 0, 101, 40))
+        self.month_label.setGeometry(QtCore.QRect(830, 0, 123, 40))
+        self.month_label.setAlignment(Qt.AlignCenter)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.month_label.setFont(font)
@@ -511,11 +519,11 @@ class DashboardView(QWidget):
         self.month_label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
         self.month_label.setObjectName("week_label_5")
         self.month_plots_widget = QWidget(self.month_frame)
-        self.month_plots_widget.setGeometry(QtCore.QRect(40, 50, 1710, 390))
-        self.month_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.month_plots_widget.setGeometry(QtCore.QRect(0, 40, 1700, 420))
+        self.month_plots_widget.setStyleSheet("background-color: rgb(41, 45, 57);")
 
         self.month_plots = MonthPlots(parent=self.month_plots_widget)
-        self.month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 390))
+        self.month_plots.setGeometry(QtCore.QRect(0, 0, 1700, 420))
         self.statistics_stackedWidget.addWidget(self.month_statistiques_page)
         self.six_months_statistiques = QtWidgets.QWidget()
         self.six_months_statistiques.setObjectName("six_months_statistiques")
@@ -529,12 +537,13 @@ class DashboardView(QWidget):
         self.six_monthe_frame.setObjectName("six_monthe_frame")
         self.six_month_frame_title = QtWidgets.QLabel(self.six_monthe_frame)
         self.six_month_plots_widget = QWidget(self.six_monthe_frame)
-        self.six_month_plots_widget.setGeometry(QtCore.QRect(40, 50, 1710, 390))
-        self.six_month_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.six_month_plots_widget.setGeometry(QtCore.QRect(0, 40, 1700, 420))
+        self.six_month_plots_widget.setStyleSheet("background-color: rgb(41, 45, 57);")
 
         self.six_month_plots = SixMonthPlots(parent=self.six_month_plots_widget)
-        self.six_month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 390))
-        self.six_month_frame_title.setGeometry(QtCore.QRect(10, 0, 191, 41))
+        self.six_month_plots.setGeometry(QtCore.QRect(0, 0, 1700, 420))
+        # self.six_month_frame_title.setGeometry(QtCore.QRect(10, 0, 191, 41))
+        self.six_month_frame_title.move(10, 0)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.six_month_frame_title.setFont(font)
@@ -543,7 +552,8 @@ class DashboardView(QWidget):
         self.six_month_frame_title.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         self.six_month_frame_title.setObjectName("six_month_frame_title")
         self.six_month_label = QtWidgets.QLabel(self.six_monthe_frame)
-        self.six_month_label.setGeometry(QtCore.QRect(841, 1, 138, 40))
+        self.six_month_label.setGeometry(QtCore.QRect(830, 0, 123, 40))
+        self.six_month_label.setAlignment(Qt.AlignCenter)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.six_month_label.setFont(font)
@@ -553,7 +563,8 @@ class DashboardView(QWidget):
         self.six_month_label.setObjectName("six_month_label")
 
         self.backButton_3 = QtWidgets.QPushButton(self.six_monthe_frame)
-        self.backButton_3.setGeometry(QtCore.QRect(793, 9, 33, 29))
+        # self.backButton_3.setGeometry(QtCore.QRect(793, 9, 33, 29))
+        self.backButton_3.move(790, 7)
         self.backButton_3.setText("")
         self.backButton_3.setIcon(icon)
         self.backButton_3.setFlat(True)
@@ -648,13 +659,13 @@ class DashboardView(QWidget):
             self.onduleurs_state.setText(status_dic.get(status))
             self.onduleurs_state.adjustSize()
 
-        if self.last_consumption != consumption or self.last_source != source or self.last_battery != battery or self.last_status != status:
-            self.timer.timeout.connect(self.updateLabels)
-            self.timer.start(10000)
-            self.last_consumption = consumption
-            self.last_source = source
-            self.last_battery = battery
-            self.last_status = status
+        # if self.last_consumption != consumption or self.last_source != source or self.last_battery != battery or self.last_status != status:
+        #     self.timer.timeout.connect(self.updateLabels)
+        #     self.timer.start(10000)
+        #     self.last_consumption = consumption
+        #     self.last_source = source
+        #     self.last_battery = battery
+        #     self.last_status = status
 
 
 
