@@ -1,33 +1,204 @@
 import sys
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QVBoxLayout, QWidget
+from backend.connection import get_connection
 
-class StatisticsPlots(QWidget):
+
+class WeekPlots(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.figure, self.ax = plt.subplots(constrained_layout=True)
+        self.figure, self.ax = plt.subplots()
+        self.plot()
+        self.ax.spines['top'].set_visible(False)
+        self.ax.spines['right'].set_visible(False)
+        self.ax.spines['left'].set_visible(False)
+        self.ax.spines['bottom'].set_color('#DDDDDD')
+        self.ax.tick_params(bottom=False, left=False)
+        self.ax.set_axisbelow(True)
+        self.ax.yaxis.grid(True, color='#EEEEEE')
+        self.ax.xaxis.grid(False)
 
-        # Plot your data
-        categories = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
-        self.ax.bar(categories, [8, 10, 11, 40, 20, 25, 35])
-
-        # Create a canvas widget to display the plot
+        bar_color = self.bars[0].get_facecolor()
+        for bar in self.bars:
+            self.ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.3,
+                         round(bar.get_height(), 1), horizontalalignment='center', color=bar_color, weight='bold')
+        self.ax.set_facecolor((41 / 255, 45 / 255, 57 / 255))
+        self.figure.patch.set_facecolor((41 / 255, 45 / 255, 57 / 255))
         self.canvas = FigureCanvas(self.figure)
-
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)
         self.setLayout(layout)
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    def plot(self):
+        mydb = get_connection()
+        cursor = mydb.cursor()
+        query = "select consomation, DATE_FORMAT(date_de_consomation, '%d-%m') from consomation where intervalle= '24h' order by date_de_consomation asc limit 7"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        dates = []
+        consumptions = []
+        for x in result:
+            consumptions.append(x[0])
+            dates.append(x[1])
 
-    # Create a widget and add the MatplotlibWidget to it
-    widget = QWidget()
-    layout = QVBoxLayout()
-    widget.setLayout(layout)
-    matplotlib_widget = StatisticsPlots(parent=widget)  # Set widget as parent
-    layout.addWidget(matplotlib_widget)
+        self.ax.tick_params(axis='x', colors='white')
+        self.ax.tick_params(axis='y', colors='white')
+        self.ax.set_ylabel('Consumption', color='white')
+        self.ax.set_xlabel('Date', color='white')
+        self.ax.set_xticks(range(len(dates)))
+        self.ax.set_xticklabels(dates, rotation=45)
+        self.ax.set_yticklabels(consumptions)
 
-    widget.show()
-    sys.exit(app.exec_())
+        plt.tight_layout()
+        self.bars = self.ax.bar(dates, consumptions)
+
+
+class MonthPlots(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.figure, self.ax = plt.subplots()
+        self.plot()
+        # Axis formatting.
+        self.ax.spines['top'].set_visible(False)
+        self.ax.spines['right'].set_visible(False)
+        self.ax.spines['left'].set_visible(False)
+        self.ax.spines['bottom'].set_color('#DDDDDD')
+        self.ax.tick_params(bottom=False, left=False)
+        self.ax.set_axisbelow(True)
+        self.ax.yaxis.grid(True, color='#EEEEEE')
+        self.ax.xaxis.grid(False)
+
+        # Add text annotations to the top of the bars.
+        bar_color = self.bars[0].get_facecolor()
+        for bar in self.bars:
+            self.ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                bar.get_height() + 0.3,
+                round(bar.get_height(), 1),
+                horizontalalignment='center',
+                color=bar_color,
+                weight='bold'
+            )
+        self.canvas = FigureCanvas(self.figure)
+        layout = QVBoxLayout()
+        layout.addWidget(self.canvas)
+        self.setLayout(layout)
+
+    def plot(self):
+        mydb = get_connection()
+        cursor = mydb.cursor()
+        query = "select consomation, DATE_FORMAT(date_de_consomation, '%d-%m') from consomation where intervalle= '24h' order by date_de_consomation asc limit 7"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        dates = []
+        consumptions = []
+        for x in result:
+            consumptions.append(x[0])
+            dates.append(x[1])
+
+        categories = dates
+        self.bars = self.ax.bar(categories, consumptions)
+
+
+class SixMonthPlots(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.figure, self.ax = plt.subplots()
+        self.plot()
+        # Axis formatting.
+        self.ax.spines['top'].set_visible(False)
+        self.ax.spines['right'].set_visible(False)
+        self.ax.spines['left'].set_visible(False)
+        self.ax.spines['bottom'].set_color('#DDDDDD')
+        self.ax.tick_params(bottom=False, left=False)
+        self.ax.set_axisbelow(True)
+        self.ax.yaxis.grid(True, color='#EEEEEE')
+        self.ax.xaxis.grid(False)
+
+        # Add text annotations to the top of the bars.
+        bar_color = self.bars[0].get_facecolor()
+        for bar in self.bars:
+            self.ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                bar.get_height() + 0.3,
+                round(bar.get_height(), 1),
+                horizontalalignment='center',
+                color=bar_color,
+                weight='bold'
+            )
+        self.canvas = FigureCanvas(self.figure)
+        layout = QVBoxLayout()
+        layout.addWidget(self.canvas)
+        self.setLayout(layout)
+
+    def plot(self):
+        mydb = get_connection()
+        cursor = mydb.cursor()
+        query = "select consomation, DATE_FORMAT(date_de_consomation, '%d-%m') from consomation where intervalle= '24h' order by date_de_consomation asc limit 7"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        dates = []
+        consumptions = []
+        for x in result:
+            consumptions.append(x[0])
+            dates.append(x[1])
+
+        categories = dates
+        self.bars = self.ax.bar(categories, consumptions)
+
+
+# def plot():
+#     mydb = get_connection()
+#     cursor = mydb.cursor()
+#     query = "select consomation, DATE_FORMAT(date_de_consomation, '%d-%m') from consomation where intervalle= '24h' order by date_de_consomation asc limit 7"
+#     cursor.execute(query)
+#     result = cursor.fetchall()
+#     dates = []
+#     consumptions = []
+#     for x in result:
+#         consumptions.append(x[0])
+#         dates.append(x[1])
+#
+#     fig, ax = plt.subplots()
+#     bars = ax.bar(
+#         dates, consumptions, color='lightblue'
+#     )
+#     ax.spines['top'].set_visible(False)
+#     ax.spines['right'].set_visible(False)
+#     ax.spines['left'].set_visible(False)
+#     ax.spines['bottom'].set_color('#DDDDDD')
+#
+#     ax.tick_params(bottom=False, left=False)
+#
+#     ax.set_axisbelow(True)
+#     ax.yaxis.grid(True, color='#EEEEEE')
+#     ax.xaxis.grid(False)
+#
+#     bar_color = bars[0].get_facecolor()
+#
+#     for bar in bars:
+#         ax.text(
+#             bar.get_x() + bar.get_width() / 2,
+#             bar.get_height() + 0.3,
+#             round(bar.get_height(), 1),
+#             horizontalalignment='center',
+#             color=bar_color,
+#             weight='bold'
+#         )
+#
+#
+#     ax.set_facecolor((41/255, 45/255, 57/255))
+#     fig.patch.set_facecolor((41/255, 45/255, 57/255))
+#     plt.show()
+#
+#
+#
+
+
+
+
+
+
+

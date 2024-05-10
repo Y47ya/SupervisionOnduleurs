@@ -669,7 +669,7 @@ class OnduleursView(QWidget):
     lasst_status = None
 
     def updateLabels(self):
-        power = snmp_get(oids.get("consumption"))
+        power = snmp_get(oids.get("outputWatt"))
         battery = snmp_get(oids.get("battery"))
         status = snmp_get(oids.get("status"))
 

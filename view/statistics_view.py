@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QFrame, QMainWindow, QWidget, QGridLayout, QPushButton, QApplication, QVBoxLayout
 from PyQt5 import QtCore, QtGui, QtWidgets
-from backend.plots import StatisticsPlots
+from backend.plots import WeekPlots, MonthPlots, SixMonthPlots
 
 
 
@@ -278,7 +278,7 @@ class StatisticsView(QWidget):
         self.week_plots_widget.setGeometry(QtCore.QRect(40, 70, 1710, 580))
         self.week_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
 
-        self.week_plots = StatisticsPlots(parent=self.week_plots_widget)
+        self.week_plots = WeekPlots(parent=self.week_plots_widget)
         self.week_plots.setGeometry(QtCore.QRect(0, 0, 1710, 580))
         self.next_button_1 = QtWidgets.QPushButton(self.week_frame)
         self.next_button_1.setGeometry(QtCore.QRect(994, 9, 33, 29))
@@ -341,7 +341,7 @@ class StatisticsView(QWidget):
         self.month_plots_widget.setGeometry(QtCore.QRect(40, 70, 1710, 580))
         self.month_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
 
-        self.month_plots = StatisticsPlots(parent=self.month_plots_widget)
+        self.month_plots = MonthPlots(parent=self.month_plots_widget)
         self.month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 580))
         self.statistics_stackedWidget.addWidget(self.month_statistiques_page)
         self.six_months_statistiques = QtWidgets.QWidget()
@@ -375,7 +375,7 @@ class StatisticsView(QWidget):
         self.six_month_plots_widget = QWidget(self.six_monthe_frame)
         self.six_month_plots_widget.setGeometry(QtCore.QRect(40, 70, 1710, 580))
         self.six_month_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.six_month_plots = StatisticsPlots(parent=self.six_month_plots_widget)
+        self.six_month_plots = SixMonthPlots(parent=self.six_month_plots_widget)
         self.six_month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 580))
 
         self.backButton_3 = QtWidgets.QPushButton(self.six_monthe_frame)

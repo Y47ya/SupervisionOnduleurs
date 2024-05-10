@@ -3,7 +3,7 @@ import threading
 from PyQt5.QtCore import pyqtSignal, Qt, QTimer, QCoreApplication
 from PyQt5.QtWidgets import QFrame, QMainWindow, QWidget, QGridLayout, QPushButton, QApplication, QVBoxLayout
 from PyQt5 import QtCore, QtGui, QtWidgets
-from backend.plots import StatisticsPlots
+from backend.plots import WeekPlots, MonthPlots, SixMonthPlots
 from backend.snmp_protocole import snmp_get
 from backend.dictionaries import oids, status_dic, source_dic
 from pysnmp.hlapi import *
@@ -448,11 +448,11 @@ class DashboardView(QWidget):
         self.week_label.setObjectName("week_label")
 
         self.week_plots_widget = QWidget(self.week_frame)
-        self.week_plots_widget.setGeometry(QtCore.QRect(40, 50, 1710, 390))
-        self.week_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.week_plots_widget.setGeometry(QtCore.QRect(40, 50, 1600, 400))
+        self.week_plots_widget.setStyleSheet("background-color: rgb(41, 45, 57);")
 
-        self.week_plots = StatisticsPlots(parent=self.week_plots_widget)
-        self.week_plots.setGeometry(QtCore.QRect(0, 0, 1710, 390))
+        self.week_plots = WeekPlots(parent=self.week_plots_widget)
+        self.week_plots.setGeometry(QtCore.QRect(0, 0, 1600, 400))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../../../../Downloads/next-svgrepo-com (1).png"), QtGui.QIcon.Normal,
@@ -514,7 +514,7 @@ class DashboardView(QWidget):
         self.month_plots_widget.setGeometry(QtCore.QRect(40, 50, 1710, 390))
         self.month_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
 
-        self.month_plots = StatisticsPlots(parent=self.month_plots_widget)
+        self.month_plots = MonthPlots(parent=self.month_plots_widget)
         self.month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 390))
         self.statistics_stackedWidget.addWidget(self.month_statistiques_page)
         self.six_months_statistiques = QtWidgets.QWidget()
@@ -532,7 +532,7 @@ class DashboardView(QWidget):
         self.six_month_plots_widget.setGeometry(QtCore.QRect(40, 50, 1710, 390))
         self.six_month_plots_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
 
-        self.six_month_plots = StatisticsPlots(parent=self.six_month_plots_widget)
+        self.six_month_plots = SixMonthPlots(parent=self.six_month_plots_widget)
         self.six_month_plots.setGeometry(QtCore.QRect(0, 0, 1710, 390))
         self.six_month_frame_title.setGeometry(QtCore.QRect(10, 0, 191, 41))
         font = QtGui.QFont()
@@ -595,8 +595,8 @@ class DashboardView(QWidget):
         self.documentation_button.setText(_translate("MainWindow", "Documentation"))
 
     timer = QTimer()
-    min_consumption = snmp_get(oids.get("consumption"))
-    max_consumption = snmp_get(oids.get("consumption"))
+    min_consumption = snmp_get(oids.get("outputWatt"))
+    max_consumption = snmp_get(oids.get("outputWatt"))
     totale_consumption = 0
     last_consumption = None
     last_source = None
@@ -604,7 +604,7 @@ class DashboardView(QWidget):
     last_status = None
 
     def updateLabels(self):
-        consumption = snmp_get(oids.get("consumption"))
+        consumption = snmp_get(oids.get("outputWatt"))
         source = snmp_get(oids.get("source"))
         battery = snmp_get(oids.get("battery"))
         status = snmp_get(oids.get("status"))
