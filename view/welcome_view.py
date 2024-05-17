@@ -1,19 +1,17 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QFrame, QMainWindow, QWidget, QGridLayout, QPushButton, QApplication, QVBoxLayout, QLineEdit
 from PyQt5 import QtCore, QtGui, QtWidgets
-from backend.user import verify_user
-
+from backend.user import verify_user, changeUserInfos
 
 
 class WelcomeView(QWidget):
     switch_to_dashboard_page = pyqtSignal()
 
-    def __init__(self, mainWindow):
+    def __init__(self):
         super().__init__()
-        mainWindow.setObjectName("Home-page")
-        mainWindow.resize(1922, 1048)
+        self.setObjectName("Home-page")
         self.layout = QVBoxLayout()
-        self.centralwidget = QtWidgets.QWidget(mainWindow)
+        self.centralwidget = QtWidgets.QWidget()
         self.centralwidget.setStyleSheet("QWidget{\n"
                                          "    background-color: rgb(41, 45, 57);}")
         self.centralwidget.setObjectName("centralwidget")
@@ -44,6 +42,16 @@ class WelcomeView(QWidget):
         self.login_button.setObjectName("pushButton_2")
         self.login_button.clicked.connect(self.switch_to_dashboard_page.emit)
 
+        # self.change_info_button = QtWidgets.QPushButton(self.centralwidget)
+        # self.change_info_button.move(1450, 750)
+        # font.setUnderline(True)
+        # self.change_info_button.setFont(font)
+        # self.change_info_button.setStyleSheet("color: rgb(255, 255, 255)")
+        # self.change_info_button.setFlat(True)
+        # self.change_info_button.setText("Changer informations du compte ?")
+        # self.change_info_button.clicked.connect(self.changeInfo)
+
+
         self.widget = QtWidgets.QWidget(self.centralwidget)
         self.widget.setGeometry(QtCore.QRect(10, 540, 1921, 101))
         self.widget.setObjectName("widget")
@@ -67,6 +75,7 @@ class WelcomeView(QWidget):
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
         self.username_input = QtWidgets.QLineEdit(self.widget)
+        self.username_input.setClearButtonEnabled(True)
         font = QtGui.QFont()
         font.setPointSize(15)
         self.username_input.setFont(font)
@@ -93,6 +102,7 @@ class WelcomeView(QWidget):
         self.label_3.setObjectName("label_3")
         self.verticalLayout_2.addWidget(self.label_3)
         self.password_input = QtWidgets.QLineEdit(self.widget)
+        self.password_input.setClearButtonEnabled(True)
         font = QtGui.QFont()
         font.setPointSize(15)
         self.password_input.setFont(font)
@@ -105,10 +115,9 @@ class WelcomeView(QWidget):
         self.password_input.setEchoMode(QLineEdit.Password)
         self.verticalLayout_2.addWidget(self.password_input)
         self.gridLayout.addLayout(self.verticalLayout_2, 0, 1, 1, 1)
-        mainWindow.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(mainWindow)
-        QtCore.QMetaObject.connectSlotsByName(mainWindow)
+        self.retranslateUi(self)
+        QtCore.QMetaObject.connectSlotsByName(self)
 
         self.layout.addWidget(self.centralwidget)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -118,9 +127,9 @@ class WelcomeView(QWidget):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "Bienvenue au notre application de \n"
-                                                    "gestion de consomation d\'electrecite"))
+                                                    "gestion de consomation électrique"))
         self.login_button.setText(_translate("MainWindow", "Se connecter"))
-        self.label_2.setText(_translate("MainWindow", "Username :"))
+        self.label_2.setText(_translate("MainWindow", "utilisateur :"))
         self.label_3.setText(_translate("MainWindow", "Password :"))
 
     def verify_usr(self):
@@ -139,3 +148,43 @@ class WelcomeView(QWidget):
     def get_password(self):
         return self.password_input.text()
 
+    def changeInfoVerification(self):
+        try:
+            if self.verify_usr():
+                self.username_input.setText("Entrez votre nouveau utilisateur")
+                self.password_input.setText("entrez votre nouveau password")
+                self.change_info_button.setText("Valider votre nouveau informations")
+                self.change_info_button.clicked.disconnect(self.changeInfoVerification)
+                self.change_info_button.clicked.connect(
+                    lambda: changeUserInfos(self.username_input.text(), self.password_input.text()))
+                self.change_info_button.clicked.disconnect(lambda: changeUserInfos(self.username_input.text(), self.password_input.text()))
+                self.username_input.setText(None)
+                self.password_input.setText(None)
+                self.change_info_button.clicked.connect(self.change_info_button)
+
+        except Exception as e:
+            print(e)
+            # self.username_input.setText("Information incorrecte")
+            # self.password_input.setText(None)
+            # try:
+            #     self.change_info_button.clicked.disconnect(self.changeInfoVerification)
+            #     self.change_info_button.clicked.connect(self.changeInfoVerification)
+            # except:
+            #     self.change_info_button.clicked.connect(self.changeInfoVerification)
+
+    def changeInfo(self):
+        self.password_input.setEchoMode(QLineEdit.Password)
+        self.change_info_button.setText("Changer informations du compte ?")
+        self.username_input.setText("Entrez votre ancien utilisateur")
+        self.password_input.setEchoMode(QLineEdit.Normal)
+        self.password_input.setText("entrez votre ancien password")
+        self.change_info_button.clicked.disconnect(self.changeInfo)
+        self.change_info_button.setText("Valider votre ancien informations")
+        self.change_info_button.clicked.connect(self.changeInfoVerification)
+        # try:
+        #     if self.verify_usr():
+        #         self.username_input.setText("kkkk")
+        #         self.password_input.setText("<PASSWORD>")
+        #
+        # except:
+        #     self.username_input.setText("Informations incorrecte")

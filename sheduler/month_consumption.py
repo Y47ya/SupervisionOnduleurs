@@ -1,0 +1,3 @@
+from backend.snmp_vers_bd import insert_month_consumption
+
+insert_month_consumption()

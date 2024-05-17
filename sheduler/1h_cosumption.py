@@ -1,0 +1,3 @@
+from backend.snmp_vers_bd import insert_hour_consumption
+
+insert_hour_consumption()

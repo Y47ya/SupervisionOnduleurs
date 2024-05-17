@@ -7,8 +7,8 @@ from backend.connection import get_connection
 
 
 class WeekPlots(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self):
+        super().__init__()
         self.figure, self.ax = plt.subplots()
         self.plot()
         self.ax.spines['top'].set_visible(False)
@@ -55,8 +55,8 @@ class WeekPlots(QWidget):
 
 
 class MonthPlots(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self):
+        super().__init__()
         self.figure, self.ax = plt.subplots()
         self.plot()
         self.ax.spines['top'].set_visible(False)
@@ -82,7 +82,7 @@ class MonthPlots(QWidget):
     def plot(self):
         mydb = get_connection()
         cursor = mydb.cursor()
-        query = "select consomation, DATE_FORMAT(date_de_consomation, '%d-%m') from consomation where intervalle= '24h' order by date_de_consomation asc limit 7"
+        query = "select consomation, DATE_FORMAT(date_de_consomation, '%d-%m') from consomation where intervalle= 'week' order by date_de_consomation asc limit 4"
         cursor.execute(query)
         result = cursor.fetchall()
         dates = []
@@ -103,8 +103,8 @@ class MonthPlots(QWidget):
 
 
 class SixMonthPlots(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self):
+        super().__init__()
         self.figure, self.ax = plt.subplots()
         self.plot()
         self.ax.spines['top'].set_visible(False)
@@ -130,7 +130,7 @@ class SixMonthPlots(QWidget):
     def plot(self):
         mydb = get_connection()
         cursor = mydb.cursor()
-        query = "select consomation, DATE_FORMAT(date_de_consomation, '%d-%m') from consomation where intervalle= '24h' order by date_de_consomation asc limit 7"
+        query = "select consomation, DATE_FORMAT(date_de_consomation, '%m') from consomation where intervalle= 'month'"
         cursor.execute(query)
         result = cursor.fetchall()
         dates = []

@@ -1,0 +1,3 @@
+from backend.snmp_vers_bd import insert_day_consumption
+
+insert_day_consumption()

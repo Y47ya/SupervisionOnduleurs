@@ -1,0 +1,3 @@
+from backend.snmp_vers_bd import insert_week_consumption
+
+insert_week_consumption()

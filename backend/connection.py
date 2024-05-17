@@ -29,14 +29,16 @@ def get_max_consumption():
     return cursor.fetchone()[0]
 
 def get_avrg_consumption():
+    curent_month = datetime.datetime.now().month
     db = get_connection()
     cursor = db.cursor()
-    cursor.execute("SELECT AVG(consomation) FROM consomation")
+    cursor.execute("SELECT AVG(consomation) FROM consomation where MONTH(date_de_consomation) = %s and intervalle = '24h'", (curent_month,))
     return cursor.fetchone()[0]
 
 def get_current_month_consumption():
-    curent_month = 9
+    curent_month = datetime.datetime.now().month
     db = get_connection()
     cursor = db.cursor()
     cursor.execute("SELECT SUM(consomation) FROM consomation WHERE MONTH(date_de_consomation) = %s", (curent_month,))
     return cursor.fetchone()[0]
+

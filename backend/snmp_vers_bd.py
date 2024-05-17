@@ -1,6 +1,8 @@
 from pysnmp.hlapi import *
-from dictionaries import oids
-from connection import get_connection
+
+from backend.connection import get_connection
+from backend.dictionaries import oids
+
 import time
 from datetime import datetime
 
@@ -10,11 +12,11 @@ query = "insert into consomation (consomation, date_de_consomation, intervalle) 
 delete_query = "delete from consomation where intervalle = %s"
 
 
-def snmp_get():
+def snmp_get(ip_address):
     errorIndication, errorStatus, errorIndex, varBinds = next(
         getCmd(SnmpEngine(),
                CommunityData('public', mpModel=0),
-               UdpTransportTarget(('192.168.12.113', 161)),
+               UdpTransportTarget((ip_address, 161)),
                ContextData(),
                ObjectType(ObjectIdentity(oids.get("outputWatt"))))
     )
@@ -28,29 +30,54 @@ def snmp_get():
             return varBind[1].prettyPrint()
 
 
-def insert_consumption():
-    while True:
-        consumption = float(snmp_get()) * (5 / 60)
-        current_datetime = datetime.now()
-        cursor.execute(query, (consumption, current_datetime, "5min"))
-        mydb.commit()
-        time.sleep(300)
+def insert_consumption(ip_address):
+    consumption = float(snmp_get(ip_address)) * (5 / 60)
+    current_datetime = datetime.now()
+    cursor.execute(query, (consumption, current_datetime, "5min"))
+    mydb.commit()
 
 
 def insert_hour_consumption():
-    while True:
-        cursor.execute("select consomation from consomation where intervalle = '5min' ")
-        total_consumption = 0
-        result = cursor.fetchall()
-        for consumption in result:
-            total_consumption += consumption[0]
+    cursor.execute("select consomation from consomation where intervalle = '5min' ")
+    total_consumption = 0
+    result = cursor.fetchall()
+    for consumption in result:
+        total_consumption += consumption[0]
+    current_datetime = datetime.now()
+    cursor.execute(query, (total_consumption, current_datetime, "1h"))
+    mydb.commit()
+    cursor.execute(delete_query, ("5min",))
+    mydb.commit()
 
-        current_datetime = datetime.now()
-        cursor.execute(query, (total_consumption, current_datetime, "1h"))
-        mydb.commit()
-        cursor.execute(delete_query, ("5min",))
-        mydb.commit()
-        time.sleep(3600)
+
+def insert_day_consumption():
+    cursor.execute("select consomation from consomation where intervalle = '1h' ")
+    total_day_consumption = 0
+    result = cursor.fetchall()
+    for consumption in result:
+        total_day_consumption += consumption[0]
+    current_datetime = datetime.now()
+    cursor.execute(query, (total_day_consumption, current_datetime, "24h"))
+    mydb.commit()
+    cursor.execute(delete_query, ("1h",))
+    mydb.commit()
+
+
+def insert_week_consumption():
+    cursor.execute("SELECT SUM(consomation), DAY(date_de_consomation) AS jour FROM consomation WHERE intervalle = '24h' AND WEEK(date_de_consomation) = WEEK(CURDATE()) GROUP BY DAY(date_de_consomation) ORDER BY date_de_consomation ASC;")
+    result = cursor.fetchall()
+    current_datetime = datetime.now()
+    cursor.execute(query, (result[0][0], current_datetime, "week"))
+    mydb.commit()
+
+
+def insert_month_consumption():
+    current_datetime = datetime.now()
+    cursor.execute("select SUM(consomation) from consomation where intervalle = 'week' and MONTH(date_de_consomation) = MONTH(CURDATE()) ")
+    result = cursor.fetchall()
+    cursor.execute(query, (result[0][0], current_datetime, "month"))
+    mydb.commit()
+
 
 
 

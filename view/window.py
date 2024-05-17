@@ -1,4 +1,8 @@
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QStackedWidget, QMessageBox
+
+from backend.dictionaries import oids
+from backend.snmp_protocole import snmp_get
 from dashboard_view import DashboardView
 from consumption_view import ConsumptionView
 from statistics_view import StatisticsView
@@ -15,86 +19,103 @@ def show_alert_box(msg):
     msg_box.setText(msg)
     msg_box.exec_()
 
+
 class MyWindow(QMainWindow):
+
     def __init__(self):
         super(MyWindow, self).__init__()
         self.usr_state = False
-        self.myWindow = QMainWindow()
-        self.myWindow.setGeometry(0, 0, 1922, 1048)
+        self.setGeometry(0, 0, 1922, 1048)
 
-        self.dashboard = DashboardView(self.myWindow)
-        self.consumption_page = ConsumptionView(self.myWindow)
-        self.statistics_page = StatisticsView(self.myWindow)
-        self.onduleurs_page = OnduleursView(self.myWindow)
-        self.welcome_page = WelcomeView(self.myWindow)
-        self.documentation_page = DocumentationView(self.myWindow)
+        try:
+            self.dashboard = DashboardView()
+            self.consumption_page = ConsumptionView()
+            self.statistics_page = StatisticsView()
+            self.onduleurs_page = OnduleursView()
+            self.welcome_page = WelcomeView()
+            self.documentation_page = DocumentationView()
 
-        self.stackedWidget = QStackedWidget()
-        self.stackedWidget.addWidget(self.dashboard)
-        self.stackedWidget.addWidget(self.consumption_page)
-        self.stackedWidget.addWidget(self.statistics_page)
-        self.stackedWidget.addWidget(self.onduleurs_page)
-        self.stackedWidget.addWidget(self.welcome_page)
-        self.stackedWidget.addWidget(self.documentation_page)
+            self.stackedWidget = QStackedWidget()
+            self.stackedWidget.addWidget(self.dashboard)
+            self.stackedWidget.addWidget(self.consumption_page)
+            self.stackedWidget.addWidget(self.statistics_page)
+            self.stackedWidget.addWidget(self.onduleurs_page)
+            self.stackedWidget.addWidget(self.welcome_page)
+            self.stackedWidget.addWidget(self.documentation_page)
 
-        self.stackedWidget.setCurrentWidget(self.dashboard)
+            self.stackedWidget.setCurrentWidget(self.welcome_page)
 
-        self.myWindow.setCentralWidget(self.stackedWidget)
+            self.setCentralWidget(self.stackedWidget)
 
-        self.dashboard.switch_to_consumption_page.connect(self.switch_to_consumption)
-        self.dashboard.switch_to_statistics_page.connect(self.switch_to_statistics)
-        self.dashboard.switch_to_onduleurs_page.connect(self.switch_to_onduleurs)
-        self.dashboard.switch_to_home_page.connect(self.switch_to_home)
-        self.dashboard.switch_to_documentation_page.connect(self.switch_to_documentation)
+            self.dashboard.switch_to_consumption_page.connect(self.switch_to_consumption)
+            self.dashboard.switch_to_statistics_page.connect(self.switch_to_statistics)
+            self.dashboard.switch_to_onduleurs_page.connect(self.switch_to_onduleurs)
+            self.dashboard.switch_to_home_page.connect(self.switch_to_home)
+            self.dashboard.switch_to_documentation_page.connect(self.switch_to_documentation)
 
-        self.consumption_page.switch_to_dashboard_page.connect(self.switch_to_dashboard)
-        self.consumption_page.switch_to_statistics_page.connect(self.switch_to_statistics)
-        self.consumption_page.switch_to_onduleurs_page.connect(self.switch_to_onduleurs)
-        self.consumption_page.switch_to_home_page.connect(self.switch_to_home)
+            self.consumption_page.switch_to_dashboard_page.connect(self.switch_to_dashboard)
+            self.consumption_page.switch_to_statistics_page.connect(self.switch_to_statistics)
+            self.consumption_page.switch_to_onduleurs_page.connect(self.switch_to_onduleurs)
+            self.consumption_page.switch_to_home_page.connect(self.switch_to_home)
+            self.consumption_page.switch_to_documentation_page.connect(self.switch_to_documentation)
 
-        self.statistics_page.switch_to_dashboard_page.connect(self.switch_to_dashboard)
-        self.statistics_page.switch_to_consumption_page.connect(self.switch_to_consumption)
-        self.statistics_page.switch_to_onduleurs_page.connect(self.switch_to_onduleurs)
-        self.statistics_page.switch_to_home_page.connect(self.switch_to_home)
+            self.statistics_page.switch_to_dashboard_page.connect(self.switch_to_dashboard)
+            self.statistics_page.switch_to_consumption_page.connect(self.switch_to_consumption)
+            self.statistics_page.switch_to_onduleurs_page.connect(self.switch_to_onduleurs)
+            self.statistics_page.switch_to_home_page.connect(self.switch_to_home)
+            self.statistics_page.switch_to_documentation_page.connect(self.switch_to_documentation)
 
-        self.onduleurs_page.switch_to_dashboard_page.connect(self.switch_to_dashboard)
-        self.onduleurs_page.switch_to_statistics_page.connect(self.switch_to_statistics)
-        self.onduleurs_page.switch_to_consumption_page.connect(self.switch_to_consumption)
-        self.onduleurs_page.switch_to_home_page.connect(self.switch_to_home)
+            self.onduleurs_page.switch_to_dashboard_page.connect(self.switch_to_dashboard)
+            self.onduleurs_page.switch_to_statistics_page.connect(self.switch_to_statistics)
+            self.onduleurs_page.switch_to_consumption_page.connect(self.switch_to_consumption)
+            self.onduleurs_page.switch_to_home_page.connect(self.switch_to_home)
+            self.onduleurs_page.switch_to_documentation_page.connect(self.switch_to_documentation)
 
-        self.welcome_page.switch_to_dashboard_page.connect(self.switch_to_dashboard_from_home)
+            self.welcome_page.switch_to_dashboard_page.connect(self.switch_to_dashboard_from_home)
 
-        self.documentation_page.switch_to_dashboard.connect(self.switch_to_dashboard)
-        self.documentation_page.switch_to_home_page.connect(self.switch_to_home)
+            self.documentation_page.switch_to_dashboard.connect(self.switch_to_dashboard)
+            self.documentation_page.switch_to_home_page.connect(self.switch_to_home)
 
-        self.myWindow.show()
+            self.show()
+
+        except:
+            raise ValueError()
 
     def switch_to_dashboard(self):
-            self.welcome_page.username_input.setText(None)
-            self.welcome_page.password_input.setText(None)
-            self.stackedWidget.setCurrentWidget(self.dashboard)
+        self.stackedWidget.setCurrentWidget(self.dashboard)
+        self.setWindowTitle("Dashboard")
+
 
     def switch_to_dashboard_from_home(self):
         if self.verify_usr():
             self.welcome_page.username_input.setText(None)
             self.welcome_page.password_input.setText(None)
             self.stackedWidget.setCurrentWidget(self.dashboard)
+            self.setWindowTitle("Dashboard")
+
+
 
     def switch_to_consumption(self):
         self.stackedWidget.setCurrentWidget(self.consumption_page)
+        self.setWindowTitle("Consomation")
 
     def switch_to_statistics(self):
         self.stackedWidget.setCurrentWidget(self.statistics_page)
+        self.setWindowTitle("Statistiques")
+
 
     def switch_to_onduleurs(self):
         self.stackedWidget.setCurrentWidget(self.onduleurs_page)
+        self.setWindowTitle("Onduleurs")
 
     def switch_to_home(self):
         self.usr_state = False
         self.stackedWidget.setCurrentWidget(self.welcome_page)
+        self.setWindowTitle("Home")
 
     def switch_to_documentation(self):
         self.stackedWidget.setCurrentWidget(self.documentation_page)
+        self.setWindowTitle("Documentation")
 
     def verify_usr(self):
         user_name = self.welcome_page.get_username()
@@ -118,6 +139,20 @@ class MyWindow(QMainWindow):
         except:
             show_alert_box("Fichier n'existe pas")
 
+
 app = QApplication(sys.argv)
-window = MyWindow()
+window = None
+
+try:
+    window = MyWindow()
+except ValueError as e:
+    alert_box = QMessageBox()
+    alert_box.setWindowTitle("Erreur")
+    alert_box.setText("Vérifiez la connexion avec les onduleurs")
+    alert_box.exec_()
+    if window:
+        window.close()
+    sys.exit(-1)
+
 sys.exit(app.exec_())
+
