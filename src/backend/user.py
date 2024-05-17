@@ -6,7 +6,7 @@ class User:
 
 def verify_user(user_name, pass_word):
     try:
-        file = open("../users.txt", "r")
+        file = open("././users.txt", "r")
         users = []
         for line in file:
             try:
@@ -21,12 +21,12 @@ def verify_user(user_name, pass_word):
                 return True
 
         raise ValueError("Utilisateurs ou mot de passe invalide")
-    except:
-        raise ValueError("Fichier n'existe pas")
+    except Exception as e:
+        raise Exception()
 
 
 def changeUserInfos(username, password):
-    with open("../users.txt", 'r') as file:
+    with open("users.txt", 'r') as file:
         lines = file.readlines()
 
     if lines:
@@ -34,7 +34,7 @@ def changeUserInfos(username, password):
 
     lines.append("username : " + username + "| password : " + password)
 
-    with open("../users.txt", 'w') as file:
+    with open("users.txt", 'w') as file:
         file.writelines(lines)
 
 

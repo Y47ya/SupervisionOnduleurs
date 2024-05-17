@@ -1,10 +1,9 @@
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QFrame, QMainWindow, QWidget, QGridLayout, QPushButton, QApplication, QVBoxLayout, \
-    QMessageBox
+from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from backend.connection import get_current_month_consumption
-from backend.plots import WeekPlots, MonthPlots, SixMonthPlots
+from src.backend.connection import get_current_month_consumption
+from src.backend.plots import WeekPlots, MonthPlots, SixMonthPlots
 
 
 
@@ -55,7 +54,7 @@ class StatisticsView(QWidget):
         self.refresh_button = QtWidgets.QPushButton(self.frame_5)
         self.refresh_button.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../icons/refresh-icon.png"), QtGui.QIcon.Normal,
+        icon.addPixmap(QtGui.QPixmap("./src/icons/refresh-icon.png"), QtGui.QIcon.Normal,
                        QtGui.QIcon.Off)
         self.refresh_button.setIcon(icon)
         self.refresh_button.setIconSize(QtCore.QSize(100, 100))
@@ -127,7 +126,7 @@ class StatisticsView(QWidget):
         self.dashboard_icon_button = QtWidgets.QPushButton(self.frame_26)
         self.dashboard_icon_button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../icons/dashbord.png"), QtGui.QIcon.Normal,
+        icon1.addPixmap(QtGui.QPixmap("./src/icons/dashbord.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.dashboard_icon_button.setIcon(icon1)
         self.dashboard_icon_button.setIconSize(QtCore.QSize(70, 70))
@@ -159,7 +158,7 @@ class StatisticsView(QWidget):
         self.consumption_icon_button.setMaximumSize(QtCore.QSize(16777215, 50))
         self.consumption_icon_button.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("../icons/Compteur-icon.png"), QtGui.QIcon.Normal,
+        icon2.addPixmap(QtGui.QPixmap("./src/icons/Compteur-icon.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.consumption_icon_button.setIcon(icon2)
         self.consumption_icon_button.setIconSize(QtCore.QSize(70, 70))
@@ -188,7 +187,7 @@ class StatisticsView(QWidget):
         self.onduleur_icon_button = QtWidgets.QPushButton(self.frame_28)
         self.onduleur_icon_button.setText("")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("../icons/onduleur-icon1.jpg"), QtGui.QIcon.Normal,
+        icon3.addPixmap(QtGui.QPixmap("./src/icons/onduleur-icon1.jpg"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.onduleur_icon_button.setIcon(icon3)
         self.onduleur_icon_button.setIconSize(QtCore.QSize(70, 70))
@@ -374,10 +373,10 @@ class StatisticsView(QWidget):
         self.stackedWidget = QtWidgets.QStackedWidget(self.statitisiques_frame)
         self.stackedWidget.setObjectName("stackedWidget")
         self.icon4 = QtGui.QIcon()
-        self.icon4.addPixmap(QtGui.QPixmap("../icons/next-svgrepo-com (1).png"), QtGui.QIcon.Normal,
+        self.icon4.addPixmap(QtGui.QPixmap("./src/icons/next-svgrepo-com (1).png"), QtGui.QIcon.Normal,
                              QtGui.QIcon.Off)
         self.icon5 = QtGui.QIcon()
-        self.icon5.addPixmap(QtGui.QPixmap("../icons/next-svgrepo-com.png"), QtGui.QIcon.Normal,
+        self.icon5.addPixmap(QtGui.QPixmap("./src/icons/next-svgrepo-com.png"), QtGui.QIcon.Normal,
                              QtGui.QIcon.Off)
         self.show_statistics()
         self.updateLabels()

@@ -1,9 +1,8 @@
 from pysnmp.hlapi import *
 
-from backend.connection import get_connection
-from backend.dictionaries import oids
+from src.backend.connection import get_connection
+from src.backend.dictionaries import oids
 
-import time
 from datetime import datetime
 
 mydb = get_connection()

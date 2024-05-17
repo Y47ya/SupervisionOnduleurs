@@ -1,9 +1,7 @@
-import sys
 import matplotlib.pyplot as plt
-import numpy as np
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtWidgets import QVBoxLayout, QWidget
-from backend.connection import get_connection
+from src.backend.connection import get_connection
 
 
 class WeekPlots(QWidget):

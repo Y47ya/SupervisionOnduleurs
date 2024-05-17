@@ -1,7 +1,4 @@
 from pysnmp.hlapi import *
-from PyQt5.QtCore import QTimer
-
-from backend.dictionaries import oids
 
 
 def snmp_get(oid, ip_address):

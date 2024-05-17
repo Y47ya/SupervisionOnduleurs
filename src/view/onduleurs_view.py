@@ -1,10 +1,8 @@
-from PyQt5.QtCore import pyqtSignal, QTimer
-from PyQt5.QtWidgets import QFrame, QMainWindow, QWidget, QGridLayout, QPushButton, QApplication, QVBoxLayout, \
-    QMessageBox
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5 import QtCore, QtGui, QtWidgets
-from backend.snmp_protocole import snmp_get
-from backend.dictionaries import oids, status_dic, source_dic
-
+from src.backend.snmp_protocole import snmp_get
+from src.backend.dictionaries import oids, status_dic
 
 
 class OnduleursView(QWidget):
@@ -48,7 +46,7 @@ class OnduleursView(QWidget):
         self.refresh_button = QtWidgets.QPushButton(self.frame_9)
         self.refresh_button.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../icons/refresh-icon.png"), QtGui.QIcon.Normal,
+        icon.addPixmap(QtGui.QPixmap("./src/icons/refresh-icon.png"), QtGui.QIcon.Normal,
                        QtGui.QIcon.Off)
         self.refresh_button.setIcon(icon)
         self.refresh_button.setIconSize(QtCore.QSize(100, 100))
@@ -58,7 +56,7 @@ class OnduleursView(QWidget):
         self.horizontalLayout_2.addWidget(self.frame_9)
         self.documentation_button = QtWidgets.QPushButton(self.refresh_frame)
         font = QtGui.QFont()
-        font.setPointSize(20)
+        font.setPointSize(15)
         font.setBold(True)
         font.setWeight(75)
         self.documentation_button.setFont(font)
@@ -78,7 +76,7 @@ class OnduleursView(QWidget):
         self.horizontalLayout_2.addWidget(self.label)
         self.logout_button = QtWidgets.QPushButton(self.refresh_frame)
         font = QtGui.QFont()
-        font.setPointSize(20)
+        font.setPointSize(15)
         font.setBold(True)
         font.setWeight(75)
         self.logout_button.setFont(font)
@@ -117,7 +115,7 @@ class OnduleursView(QWidget):
         self.dashboard_icon_buttonns = QtWidgets.QPushButton(self.frame_24)
         self.dashboard_icon_buttonns.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../icons/dashbord.png"), QtGui.QIcon.Normal,
+        icon1.addPixmap(QtGui.QPixmap("./src/icons/dashbord.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.dashboard_icon_buttonns.setIcon(icon1)
         self.dashboard_icon_buttonns.setIconSize(QtCore.QSize(70, 70))
@@ -149,7 +147,7 @@ class OnduleursView(QWidget):
         self.consumption_icon_button.setMaximumSize(QtCore.QSize(16777215, 50))
         self.consumption_icon_button.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("../icons/Compteur-icon.png"), QtGui.QIcon.Normal,
+        icon2.addPixmap(QtGui.QPixmap("./src/icons/Compteur-icon.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.consumption_icon_button.setIcon(icon2)
         self.consumption_icon_button.setIconSize(QtCore.QSize(70, 70))
@@ -180,7 +178,7 @@ class OnduleursView(QWidget):
         self.statistiques_icon_button = QtWidgets.QPushButton(self.frame_26)
         self.statistiques_icon_button.setText("")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("../icons/statistic-icon.png"), QtGui.QIcon.Normal,
+        icon3.addPixmap(QtGui.QPixmap("./src/icons/statistic-icon.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.statistiques_icon_button.setIcon(icon3)
         self.statistiques_icon_button.setIconSize(QtCore.QSize(70, 70))
@@ -310,7 +308,7 @@ class OnduleursView(QWidget):
         self.battery_button_3 = QtWidgets.QPushButton(self.site_alarms_frame)
         self.battery_button_3.setText("")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("../icons/low-battery-png.png"), QtGui.QIcon.Normal,
+        icon4.addPixmap(QtGui.QPixmap("./src/icons/low-battery-png.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.battery_button_3.setIcon(icon4)
         self.battery_button_3.setIconSize(QtCore.QSize(80, 80))
@@ -320,7 +318,7 @@ class OnduleursView(QWidget):
         self.pushButton_11 = QtWidgets.QPushButton(self.site_alarms_frame)
         self.pushButton_11.setText("")
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("../icons/warning.png"), QtGui.QIcon.Normal,
+        icon5.addPixmap(QtGui.QPixmap("./src/icons/warning.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.pushButton_11.setIcon(icon5)
         self.pushButton_11.setIconSize(QtCore.QSize(80, 80))
@@ -330,7 +328,7 @@ class OnduleursView(QWidget):
         self.electrecite_button_3 = QtWidgets.QPushButton(self.site_alarms_frame)
         self.electrecite_button_3.setText("")
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap("../icons/bolt-auto.png"), QtGui.QIcon.Normal,
+        icon6.addPixmap(QtGui.QPixmap("./src/icons/bolt-auto.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.electrecite_button_3.setIcon(icon6)
         self.electrecite_button_3.setIconSize(QtCore.QSize(80, 80))

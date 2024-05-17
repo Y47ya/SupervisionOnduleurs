@@ -1,14 +1,11 @@
-import time
-
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QFrame, QMainWindow, QWidget, QGridLayout, QPushButton, QApplication, QVBoxLayout, \
-    QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QApplication, QVBoxLayout
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from backend.connection import get_min_consumption, get_max_consumption, get_avrg_consumption, \
+from src.backend.connection import get_min_consumption, get_max_consumption, get_avrg_consumption, \
     get_current_month_consumption
-from backend.dictionaries import oids, source_dic
-from backend.snmp_protocole import snmp_get
+from src.backend.dictionaries import oids, source_dic
+from src.backend.snmp_protocole import snmp_get
 
 
 
@@ -51,7 +48,7 @@ class ConsumptionView(QWidget):
         self.gridLayout = QtWidgets.QGridLayout(self.frame_5)
         self.refresh_button = QPushButton(self.frame_5)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../icons/refresh-icon.png"), QtGui.QIcon.Normal,
+        icon.addPixmap(QtGui.QPixmap("./src/icons/refresh-icon.png"), QtGui.QIcon.Normal,
                        QtGui.QIcon.Off)
         self.refresh_button.setIcon(icon)
         self.refresh_button.setIconSize(QtCore.QSize(100, 100))
@@ -124,7 +121,7 @@ class ConsumptionView(QWidget):
         self.dashboard_icon_button.setMaximumSize(QtCore.QSize(167777, 167777))
         self.dashboard_icon_button.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../icons/dashbord.png"), QtGui.QIcon.Normal,
+        icon.addPixmap(QtGui.QPixmap("./src/icons/dashbord.png"), QtGui.QIcon.Normal,
                        QtGui.QIcon.Off)
         self.dashboard_icon_button.setIcon(icon)
         self.dashboard_icon_button.setIconSize(QtCore.QSize(70, 70))
@@ -155,7 +152,7 @@ class ConsumptionView(QWidget):
         self.statistiques_icon_button = QtWidgets.QPushButton(self.frame_14)
         self.statistiques_icon_button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../icons/statistic-icon.png"), QtGui.QIcon.Normal,
+        icon1.addPixmap(QtGui.QPixmap("./src/icons/statistic-icon.png"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.statistiques_icon_button.setIcon(icon1)
         self.statistiques_icon_button.setIconSize(QtCore.QSize(70, 70))
@@ -184,7 +181,7 @@ class ConsumptionView(QWidget):
         self.onduleur_icon_button = QtWidgets.QPushButton(self.frame_15)
         self.onduleur_icon_button.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("../icons/onduleur-icon1.jpg"), QtGui.QIcon.Normal,
+        icon2.addPixmap(QtGui.QPixmap("./src/icons/onduleur-icon1.jpg"), QtGui.QIcon.Normal,
                         QtGui.QIcon.Off)
         self.onduleur_icon_button.setIcon(icon2)
         self.onduleur_icon_button.setIconSize(QtCore.QSize(70, 70))

@@ -1,7 +1,7 @@
-from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QMessageBox
 from PyQt5 import QtCore, QtGui, QtWidgets
-from backend.documentation import listDir, openFile, copyFile, deleteFile
+from src.backend.documentation import listDir, openFile, copyFile, deleteFile
 
 
 def show_alert_box(msg):
@@ -115,7 +115,7 @@ class DocumentationView(QWidget):
         self.back_button.setGeometry(QtCore.QRect(12, 0, 86, 119))
         self.back_button.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../icons/back-icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("./src/icons/back-icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.back_button.setIcon(icon)
         self.back_button.setIconSize(QtCore.QSize(110, 110))
         self.back_button.setFlat(True)

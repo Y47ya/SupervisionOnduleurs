@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QFrame, QMainWindow, QWidget, QGridLayout, QPushButton, QApplication, QVBoxLayout, QLineEdit
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLineEdit
 from PyQt5 import QtCore, QtGui, QtWidgets
-from backend.user import verify_user, changeUserInfos
+from src.backend.user import verify_user
 
 
 class WelcomeView(QWidget):
@@ -129,8 +129,8 @@ class WelcomeView(QWidget):
         self.label.setText(_translate("MainWindow", "Bienvenue au notre application de \n"
                                                     "gestion de consomation électrique"))
         self.login_button.setText(_translate("MainWindow", "Se connecter"))
-        self.label_2.setText(_translate("MainWindow", "utilisateur :"))
-        self.label_3.setText(_translate("MainWindow", "Password :"))
+        self.label_2.setText(_translate("MainWindow", "Utilisateur :"))
+        self.label_3.setText(_translate("MainWindow", "Mot de passe :"))
 
     def verify_usr(self):
         username = self.username_input.text()
@@ -148,43 +148,43 @@ class WelcomeView(QWidget):
     def get_password(self):
         return self.password_input.text()
 
-    def changeInfoVerification(self):
-        try:
-            if self.verify_usr():
-                self.username_input.setText("Entrez votre nouveau utilisateur")
-                self.password_input.setText("entrez votre nouveau password")
-                self.change_info_button.setText("Valider votre nouveau informations")
-                self.change_info_button.clicked.disconnect(self.changeInfoVerification)
-                self.change_info_button.clicked.connect(
-                    lambda: changeUserInfos(self.username_input.text(), self.password_input.text()))
-                self.change_info_button.clicked.disconnect(lambda: changeUserInfos(self.username_input.text(), self.password_input.text()))
-                self.username_input.setText(None)
-                self.password_input.setText(None)
-                self.change_info_button.clicked.connect(self.change_info_button)
+    # def changeInfoVerification(self):
+    #     try:
+    #         if self.verify_usr():
+    #             self.username_input.setText("Entrez votre nouveau utilisateur")
+    #             self.password_input.setText("entrez votre nouveau password")
+    #             self.change_info_button.setText("Valider votre nouveau informations")
+    #             self.change_info_button.clicked.disconnect(self.changeInfoVerification)
+    #             self.change_info_button.clicked.connect(
+    #                 lambda: changeUserInfos(self.username_input.text(), self.password_input.text()))
+    #             self.change_info_button.clicked.disconnect(lambda: changeUserInfos(self.username_input.text(), self.password_input.text()))
+    #             self.username_input.setText(None)
+    #             self.password_input.setText(None)
+    #             self.change_info_button.clicked.connect(self.change_info_button)
+    #
+    #     except Exception as e:
+    #         print(e)
+    #         # self.username_input.setText("Information incorrecte")
+    #         # self.password_input.setText(None)
+    #         # try:
+    #         #     self.change_info_button.clicked.disconnect(self.changeInfoVerification)
+    #         #     self.change_info_button.clicked.connect(self.changeInfoVerification)
+    #         # except:
+    #         #     self.change_info_button.clicked.connect(self.changeInfoVerification)
 
-        except Exception as e:
-            print(e)
-            # self.username_input.setText("Information incorrecte")
-            # self.password_input.setText(None)
-            # try:
-            #     self.change_info_button.clicked.disconnect(self.changeInfoVerification)
-            #     self.change_info_button.clicked.connect(self.changeInfoVerification)
-            # except:
-            #     self.change_info_button.clicked.connect(self.changeInfoVerification)
-
-    def changeInfo(self):
-        self.password_input.setEchoMode(QLineEdit.Password)
-        self.change_info_button.setText("Changer informations du compte ?")
-        self.username_input.setText("Entrez votre ancien utilisateur")
-        self.password_input.setEchoMode(QLineEdit.Normal)
-        self.password_input.setText("entrez votre ancien password")
-        self.change_info_button.clicked.disconnect(self.changeInfo)
-        self.change_info_button.setText("Valider votre ancien informations")
-        self.change_info_button.clicked.connect(self.changeInfoVerification)
-        # try:
-        #     if self.verify_usr():
-        #         self.username_input.setText("kkkk")
-        #         self.password_input.setText("<PASSWORD>")
-        #
-        # except:
-        #     self.username_input.setText("Informations incorrecte")
+    # def changeInfo(self):
+    #     self.password_input.setEchoMode(QLineEdit.Password)
+    #     self.change_info_button.setText("Changer informations du compte ?")
+    #     self.username_input.setText("Entrez votre ancien utilisateur")
+    #     self.password_input.setEchoMode(QLineEdit.Normal)
+    #     self.password_input.setText("entrez votre ancien password")
+    #     self.change_info_button.clicked.disconnect(self.changeInfo)
+    #     self.change_info_button.setText("Valider votre ancien informations")
+    #     self.change_info_button.clicked.connect(self.changeInfoVerification)
+    #     # try:
+    #     #     if self.verify_usr():
+    #     #         self.username_input.setText("kkkk")
+    #     #         self.password_input.setText("<PASSWORD>")
+    #     #
+    #     # except:
+    #     #     self.username_input.setText("Informations incorrecte")

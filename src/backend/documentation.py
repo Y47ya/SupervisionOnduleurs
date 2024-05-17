@@ -2,7 +2,7 @@ import os
 from webbrowser import open
 import shutil
 
-FOLDER_PATH = "../documentation"
+FOLDER_PATH = "./src/documentation"
 
 
 def listDir():

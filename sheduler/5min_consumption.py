@@ -1,4 +1,4 @@
-from backend.snmp_vers_bd import insert_consumption
+from src.backend.snmp_vers_bd import insert_consumption
 
 
 insert_consumption('192.168.12.113')
