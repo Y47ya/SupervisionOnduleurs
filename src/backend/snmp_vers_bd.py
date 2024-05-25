@@ -7,7 +7,7 @@ from datetime import datetime
 
 mydb = get_connection()
 cursor = mydb.cursor()
-query = "insert into consomation (consomation, date_de_consomation, intervalle) values (%s, %s, %s)"
+query = "insert into consomation (consomation, date_de_consomation, intervalle, id_onduleur) values (%s, %s, %s, %s)"
 delete_query = "delete from consomation where intervalle = %s"
 
 
@@ -32,49 +32,49 @@ def snmp_get(ip_address):
 def insert_consumption(ip_address):
     consumption = float(snmp_get(ip_address)) * (5 / 60)
     current_datetime = datetime.now()
-    cursor.execute(query, (consumption, current_datetime, "5min"))
+    cursor.execute(query, (consumption, current_datetime, "5min", ip_address))
     mydb.commit()
 
 
-def insert_hour_consumption():
-    cursor.execute("select consomation from consomation where intervalle = '5min' ")
+def insert_hour_consumption(ip_address):
+    cursor.execute("select consomation from consomation where intervalle = '5min' and id_onduleur = %s", (ip_address,))
     total_consumption = 0
     result = cursor.fetchall()
     for consumption in result:
         total_consumption += consumption[0]
     current_datetime = datetime.now()
-    cursor.execute(query, (total_consumption, current_datetime, "1h"))
+    cursor.execute(query, (total_consumption, current_datetime, "1h", ip_address))
     mydb.commit()
     cursor.execute(delete_query, ("5min",))
     mydb.commit()
 
 
-def insert_day_consumption():
-    cursor.execute("select consomation from consomation where intervalle = '1h' ")
+def insert_day_consumption(ip_address):
+    cursor.execute("select consomation from consomation where intervalle = '1h' and id_onduleur = %s", (ip_address, ))
     total_day_consumption = 0
     result = cursor.fetchall()
     for consumption in result:
         total_day_consumption += consumption[0]
     current_datetime = datetime.now()
-    cursor.execute(query, (total_day_consumption, current_datetime, "24h"))
+    cursor.execute(query, (total_day_consumption, current_datetime, "24h", ip_address))
     mydb.commit()
     cursor.execute(delete_query, ("1h",))
     mydb.commit()
 
 
-def insert_week_consumption():
-    cursor.execute("SELECT SUM(consomation), DAY(date_de_consomation) AS jour FROM consomation WHERE intervalle = '24h' AND WEEK(date_de_consomation) = WEEK(CURDATE()) GROUP BY DAY(date_de_consomation) ORDER BY date_de_consomation ASC;")
+def insert_week_consumption(ip_address):
+    cursor.execute("SELECT SUM(consomation), DAY(date_de_consomation) AS jour FROM consomation WHERE intervalle = '24h' AND WEEK(date_de_consomation, 1) = WEEK(CURDATE(), 1) and id_onduleur = %s GROUP BY DAY(date_de_consomation) ORDER BY date_de_consomation ASC;", (ip_address, ))
     result = cursor.fetchall()
     current_datetime = datetime.now()
-    cursor.execute(query, (result[0][0], current_datetime, "week"))
+    cursor.execute(query, (result[0][0], current_datetime, "week", ip_address))
     mydb.commit()
 
 
-def insert_month_consumption():
+def insert_month_consumption(ip_address):
     current_datetime = datetime.now()
-    cursor.execute("select SUM(consomation) from consomation where intervalle = 'week' and MONTH(date_de_consomation) = MONTH(CURDATE()) ")
+    cursor.execute("select SUM(consomation) from consomation where intervalle = 'week' and MONTH(date_de_consomation) = MONTH(CURDATE()) and id_onduleur = %s", (ip_address, ))
     result = cursor.fetchall()
-    cursor.execute(query, (result[0][0], current_datetime, "month"))
+    cursor.execute(query, (result[0][0], current_datetime, "month", ip_address))
     mydb.commit()
 
 
