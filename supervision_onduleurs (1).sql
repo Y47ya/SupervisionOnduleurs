@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 21 mai 2024 à 11:57
+-- Généré le : sam. 25 mai 2024 à 14:43
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `alarm` (
   `id` int(11) NOT NULL,
-  `id_onduleur` int(11) NOT NULL,
+  `id_onduleur` varchar(50) DEFAULT NULL,
   `type_alarm` varchar(20) DEFAULT NULL,
   `date_alarm` datetime DEFAULT NULL,
   `etat_alarm` varchar(20) DEFAULT NULL
@@ -45,19 +45,18 @@ CREATE TABLE `consomation` (
   `id` int(11) NOT NULL,
   `consomation` double DEFAULT NULL,
   `date_de_consomation` datetime DEFAULT NULL,
-  `intervalle` varchar(30) DEFAULT NULL
+  `intervalle` varchar(30) DEFAULT NULL,
+  `id_onduleur` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `consomation`
 --
 
-INSERT INTO `consomation` (`id`, `consomation`, `date_de_consomation`, `intervalle`) VALUES
-(3, 66.66666666666666, '2024-05-16 15:12:15', '24h'),
-(4, 66.66666666666666, '2024-05-16 15:12:21', 'week'),
-(5, 66.66666666666666, '2024-05-16 15:12:28', 'month'),
-(6, 66.66666666666666, '2024-05-16 15:13:21', 'month'),
-(7, 66.66666666666666, '2024-05-17 13:50:32', '5min');
+INSERT INTO `consomation` (`id`, `consomation`, `date_de_consomation`, `intervalle`, `id_onduleur`) VALUES
+(3, 3000, '2024-05-25 13:38:20', '24h', '192.168.12.113'),
+(4, 3000, '2024-05-25 13:39:31', 'week', '192.168.12.113'),
+(5, 3000, '2024-05-25 13:39:46', 'month', '192.168.12.113');
 
 -- --------------------------------------------------------
 
@@ -66,11 +65,18 @@ INSERT INTO `consomation` (`id`, `consomation`, `date_de_consomation`, `interval
 --
 
 CREATE TABLE `onduleurs` (
-  `id_onduleur` int(11) NOT NULL,
+  `id_onduleur` varchar(50) NOT NULL,
   `nom_onduleur` varchar(20) DEFAULT NULL,
   `numero_de_serie` varchar(50) DEFAULT NULL,
   `modele` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `onduleurs`
+--
+
+INSERT INTO `onduleurs` (`id_onduleur`, `nom_onduleur`, `numero_de_serie`, `modele`) VALUES
+('192.168.12.113', 'EATON', NULL, NULL);
 
 --
 -- Index pour les tables déchargées
@@ -81,13 +87,14 @@ CREATE TABLE `onduleurs` (
 --
 ALTER TABLE `alarm`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_onduleur` (`id_onduleur`);
+  ADD KEY `fk_id_onduleur_2` (`id_onduleur`);
 
 --
 -- Index pour la table `consomation`
 --
 ALTER TABLE `consomation`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_id_onduleur_1` (`id_onduleur`);
 
 --
 -- Index pour la table `onduleurs`
@@ -109,13 +116,7 @@ ALTER TABLE `alarm`
 -- AUTO_INCREMENT pour la table `consomation`
 --
 ALTER TABLE `consomation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT pour la table `onduleurs`
---
-ALTER TABLE `onduleurs`
-  MODIFY `id_onduleur` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Contraintes pour les tables déchargées
@@ -125,7 +126,14 @@ ALTER TABLE `onduleurs`
 -- Contraintes pour la table `alarm`
 --
 ALTER TABLE `alarm`
-  ADD CONSTRAINT `alarm_ibfk_1` FOREIGN KEY (`id_onduleur`) REFERENCES `onduleurs` (`id_onduleur`);
+  ADD CONSTRAINT `fk_id_onduleur_2` FOREIGN KEY (`id_onduleur`) REFERENCES `onduleurs` (`id_onduleur`);
+
+--
+-- Contraintes pour la table `consomation`
+--
+ALTER TABLE `consomation`
+  ADD CONSTRAINT `fk_id_onduleur` FOREIGN KEY (`id_onduleur`) REFERENCES `onduleurs` (`id_onduleur`),
+  ADD CONSTRAINT `fk_id_onduleur_1` FOREIGN KEY (`id_onduleur`) REFERENCES `onduleurs` (`id_onduleur`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
