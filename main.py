@@ -7,6 +7,7 @@ from src.view.window import MyWindow
 app = QApplication(sys.argv)
 window = None
 
+
 try:
     window = MyWindow()
 except ValueError as e:
